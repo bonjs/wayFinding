@@ -1,0 +1,15 @@
+{
+  "name": "wayFinding",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "alex",
+  "license": "ISC",
+  "devDependencies": {
+    "express": "^4.14.0",
+    "mockjs": "^1.0.1-beta3"
+  }
+}

@@ -1,0 +1,64 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>wayFinding</title>
+  
+  <style>
+	* {
+		padding: 0px;
+		margin: 0px;
+		float: left;
+		font-size: 12px;
+	}
+	.container {
+		margin: 30px;
+		width: 510px;
+		border-bottom: 1px gray solid;
+		border-right: 1px gray solid;
+		
+	}
+	li {
+		width: 50px;
+		height: 50px;
+		list-style: none;
+		border-left: 1px gray solid;
+		border-top: 1px gray solid;
+		position: relative;
+	}
+	.start {
+		background: red;
+	}
+	.end {
+		background: green;
+	}
+	.npc {
+		background: #2b3b46;
+	}
+	.f, .g, .h {
+		position: absolute;
+	}
+	.f {
+		color: blue;
+		left: 8px;
+		top: 8px;
+	}
+	.g {
+		left: 8px;
+		bottom: 8px;
+	}
+	.h {
+		right: 8px;
+		bottom: 8px;
+	}
+	
+  </style>
+  
+  <script src="./src/jquery.js"></script>
+  <script src="./src/index.js"></script>
+</head>
+
+<body>
+	<div class="container"></div>
+</body>
+</html>
