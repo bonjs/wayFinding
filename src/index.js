@@ -104,6 +104,17 @@ $(function() {
 		},
 		showLine: function() {
 			var node = this.endNode;
+			var timer = setInterval(function(){
+				node = node.parentNode;
+				if(!/start|roadblock|end/.test(node.type)) {
+					node.el.css({
+						background: '#1f1'
+					});
+				}
+				node || clearInterval(timer);				
+			}, 100);
+			
+			return;
 			
 			while(node = node.parentNode) {
 				console.log(node);
