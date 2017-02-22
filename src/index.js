@@ -16,10 +16,10 @@ $(function() {
 			}
 		}
 		
-		this.setStart(13);
+		this.setStart(6);
 		this.setEnd(76);
 		
-		this.setRoadblock([42,43,44,45,46,47,37,27,17,7]);
+		this.setRoadblock([32,33,34,35,36,37,27,17,7,42, 52,62, 72,82,83,84,85,86,87,77,67, 57,56,55,54]);
 	};
 	WayFinding.prototype = {
 		constructor: WayFinding,
@@ -29,7 +29,7 @@ $(function() {
 		setStart: function(index) {		// 设置始点node
 			var proto = this.constructor.prototype;
 			var startNode = proto.startNode = proto.currentNode = this.allNodes[index];
-			startNode.el.addClass('start');
+			startNode.el.addClass('start').html('A');
 			startNode.type = 'start';
 			startNode.g = 0;
 			//startNode.h = startNode.getH();
@@ -37,7 +37,7 @@ $(function() {
 		setEnd: function(index) {		// 设置终点node
 			var proto = this.constructor.prototype;
 			proto.endNode = this.allNodes[index];
-			proto.endNode.el.addClass('end');
+			proto.endNode.el.addClass('end').html('B');
 			proto.endNode.type = 'end';
 		},
 		setRoadblock: function(arr) {	// 设置障碍物
@@ -62,7 +62,6 @@ $(function() {
 				return;
 			}
 			
-			
 			if(!/start|roadblock|end/.test(node.type)) {
 				node.el.css({
 					background: '#6d6d1e'
@@ -80,13 +79,12 @@ $(function() {
 				} else {								// 斜方，距离为1.4,故g增1.4
 					n.g = node.g + 1.4;
 				}
-				
-				n.showInfo(n.g, n.getH(), n.getF());
+				if(!/start|roadblock|end/.test(n.type)) {
+					n.showInfo(n.g, n.getH(), n.getF());
+				}
 				this.openList.push(n);
 				n.parentNode = node;
 			}.bind(this));
-			
-			
 			
 			this.openList.forEach(function(n, i) {
 				if(n == node) {
@@ -106,14 +104,14 @@ $(function() {
 		},
 		showLine: function() {
 			var node = this.endNode;
-			node.el.css({
-					background: 'green'
-				});
+			
 			while(node = node.parentNode) {
 				console.log(node);
-				node.el.css({
-					background: 'green'
-				});
+				if(!/start|roadblock|end/.test(node.type)) {
+					node.el.css({
+						background: '#1f1'
+					});
+				}
 			}
 		}
 	};
@@ -202,7 +200,10 @@ $(function() {
 	};
 	
 	var w = new WayFinding();
-	w.start();
+	
+	setTimeout(function() {
+		w.start();
+	}, 1000);
 	
 });
 
