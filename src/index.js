@@ -2,6 +2,9 @@
 var WayFinding = function(opts) {
 	this.rows = opts.rows || 10;
 	this.cols = opts.cols || 10;
+	
+	this.isShowInfo = opts.isShowInfo !== false;
+
 	var allNodes = this.allNodes;
 	for(var i = 0; i < this.rows; i ++) {
 		var a = []
@@ -77,9 +80,11 @@ WayFinding.prototype = {
 			} else {								// 斜方，距离为1.4,故g增1.4
 				n.g = toFixed(node.g + 1.4);
 			}
+			
 			if(!/start|roadblock|end/.test(n.type)) {
-				
-				n.showInfo(n.g, n.getH(), n.getF());
+				n.h = n.getH();
+				n.f = n.getF();
+				this.isShowInfo && n.showInfo(n.g, n.h, n.f);
 			}
 			this.openList.push(n);
 			n.parentNode = node;
@@ -103,7 +108,7 @@ WayFinding.prototype = {
 		
 		setTimeout(function() {
 			this.checkNode(smallestF);	
-		}.bind(this), 50);
+		}.bind(this), 10);
 		
 	},
 	showLine: function() {
@@ -126,7 +131,7 @@ WayFinding.prototype = {
 					background: '#1f1'
 				});
 			}			
-		}, 100);
+		}, 50);
 	},
 	
 	showLine2: function() {
