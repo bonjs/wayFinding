@@ -68,27 +68,13 @@ WayFinding.prototype = {
 		
 		if(!/start|roadblock|end/.test(node.type)) {
 			node.el.css({
-				background: '#6d6d1e'
+				//background: '#6d6d1e'
 			});	
 		}
 		
-		var neighbors = node.getNeighbors();
+		var neighbors = node.getNeighbors(this.isShowInfo);
 	
-		neighbors.forEach(function(n, i) {
-			if(n.x == node.x || n.y == node.y) {	// 上下，左右，距离为1, 故g增1
-				n.g = toFixed(node.g + 1);
-			} else {								// 斜方，距离为1.4,故g增1.4
-				n.g = toFixed(node.g + 1.4);
-			}
-			
-			if(!/start|roadblock|end/.test(n.type)) {
-				n.h = n.getH();
-				n.f = n.getF();
-				this.isShowInfo && n.showInfo(n.g, n.h, n.f);
-			}
-			this.openList.push(n);
-			n.parentNode = node;
-		}.bind(this));
+		Array.prototype.push.apply(this.openList, neighbors);
 		
 		this.openList.forEach(function(n, i) {
 			if(n == node) {
@@ -100,15 +86,17 @@ WayFinding.prototype = {
 		// 获取F值最小的节点
 		var smallestF = this.openList.reduce(function(node, n, i) {
 			return node.f > n.f ? n : node;
-		}, {f:Number.MAX_VALUE});
+		}, {
+			f: Number.MAX_VALUE
+		});
 		
 		smallestF.el.addClass('smallest');
 		
 		console.log(smallestF);
 		
-		setTimeout(function() {
+		//setTimeout(function() {
 			this.checkNode(smallestF);	
-		}.bind(this), 10);
+		//}.bind(this), 0);
 		
 	},
 	showLine: function() {
@@ -131,7 +119,7 @@ WayFinding.prototype = {
 					background: '#1f1'
 				});
 			}			
-		}, 50);
+		}, 0);
 	},
 	
 	showLine2: function() {
@@ -161,7 +149,7 @@ var Node = function(opts) {
 }
 Node.prototype = {
 	constructor: Node,
-	getNeighbors: function() {
+	getNeighbors: function(isShowInfo) {
 		var proto = WayFinding.prototype;
 		var allNodes = proto.allNodes;
 		var openList = proto.openList;
@@ -184,13 +172,43 @@ Node.prototype = {
 			var node = allNodes[this.y + p[k][0]] ? allNodes[this.y + p[k][0]][this.x + p[k][1]] : null;
 			if(node) {
 				if(/start|roadblock/.test(node.type)) {	// 忽略
-					console.log('start|roadblock忽略');
+					//console.log('start|roadblock忽略');
 				} else if(checkIn(closeList, node)) {
-					console.log('closeList忽略');
+					//console.log('closeList忽略');
 				} else if(checkIn(openList, node)) {
-					console.log('openList　忽略');
+					console.log('openList');
+					/**
+					如果邻居已经在 Open List 中（即该邻居已有父节点），
+					计算从当前节点移动到该邻居是否能使其得到更小的 G 值。
+					如果能，则把该邻居的父节点重设为当前节点，并更新其 G 和 F 值。					
+					*/
+					var gNew;
+					if(this.x == node.x || this.y == node.y) {
+						gNew = toFixed(this.g + 1);
+					} else {
+						gNew = toFixed(this.g + 1.4);
+					}
+					if(gNew < node.g) {
+						node.g = gNew;
+						node.f = node.getF();
+						node.parentNode = this;
+					}
 				} else {
 					console.log('其他');
+					
+					if(this.x == node.x || this.y == node.y) {	// 上下，左右，距离为1, 故g增1
+						node.g = toFixed(this.g + 1);
+					} else {								// 斜方，距离为1.4,故g增1.4
+						node.g = toFixed(this.g + 1.4);
+					}
+					
+					node.h = node.getH();
+					node.f = node.getF();
+					node.parentNode = this;
+					if(!/start|roadblock|end/.test(node.type)) {
+						isShowInfo && node.showInfo();
+					}
+					
 					arr.push(node);
 				}
 			}
@@ -224,11 +242,11 @@ Node.prototype = {
 	getF: function() {
 		return this.f = this.getH() + this.g;
 	},
-	showInfo: function(g, h, f) {
+	showInfo: function() {
 		this.el.html([
-			'<span class="g">' + g + '</span>',
-			'<span class="h">' + h + '</span>',
-			'<span class="f">' + f + '</span>',
+			'<span class="g">' + this.g + '</span>',
+			'<span class="h">' + this.h + '</span>',
+			'<span class="f">' + this.f + '</span>',
 		].join('')).css({
 			background: '#ee0'
 		});
