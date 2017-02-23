@@ -13,20 +13,21 @@
 	}
 	.container {
 		margin: 30px;
-		width: 510px;
+		width: 420px;
 		border-bottom: 1px gray solid;
 		border-right: 1px gray solid;
+		
 	}
 	li {
-		width: 50px;
-		height: 50px;
+		width: 20px;
+		height: 20px;
 		list-style: none;
 		border-left: 1px gray solid;
 		border-top: 1px gray solid;
 		position: relative;
 	}
 	.start,.end {
-		font-size:38px;
+		//font-size:38px;
 		font-weight: bold;
 	}
 	.start {
@@ -54,10 +55,6 @@
 		right: 8px;
 		bottom: 8px;
 	}
-	.smallest {
-		color: red;
-		font-weight: bold;
-	}
 	
   </style>
   
@@ -66,42 +63,39 @@
 <body>
 	<div class="container"></div>
 	
-  <script src="./src/jquery.js"></script>
-  <script src="./src/index.js"></script>
-  
-  <script>
-  
-	var w = new WayFinding({
-		rols: 10,
-		cols: 10,
-		start: [4,0],
-		end: [7,0],
-		roadblock: function() {
-			var arr = [
-				[2,3],
-				[3,3],
-				[4,3],
-				[5,3],
-				[6,3],
-				[6,2],
-				[6,1],
-				[6,0],
-				[7,3],
-				[8,3],
-				[2,4],
-				[2,5],
-				[2,6],
-				[2,7]
-			];
-			
-			return arr;
-		}()
-	});
-	setTimeout(function() {
-		w.start();
-	});
-  </script>
+	<script src="./src/jquery.js"></script>
+	<script src="./src/index.js"></script>
 	
-	
+	<script>
+		var w = new WayFinding({
+			rows: 20,
+			cols: 20,
+			start: [4,0],
+			end: [7,0],
+			roadblock: function() {
+				var arr = [
+					[2,3],
+					[3,3],
+					[4,3],
+					[5,3],
+					[6,3],
+					[6,2],
+					[6,1],
+					[6,0],
+					[7,3],
+					[8,3],
+					[2,4],
+					[2,5],
+					[2,6],
+					[2,7]
+				];
+				
+				return arr;
+			}()
+		});
+		setTimeout(function() {
+			w.start();
+		});
+	</script>
 </body>
 </html>
