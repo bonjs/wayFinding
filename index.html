@@ -13,6 +13,7 @@
 		font-size: 12px;
 	}
 	.container {
+		display: none;
 		margin: 30px;
 		width: 513px;
 		border-bottom: 1px gray solid;
@@ -74,6 +75,8 @@
   <script>
   
 	var w = new WayFinding({
+		isShowInfo: true,
+		showProcess: true,
 		rols: 10,
 		cols: 10,
 		start: [4,0],
@@ -101,7 +104,7 @@
 	});
 	setTimeout(function() {
 		w.start();
-	});
+	}, 8000);
   </script>
 	
 	
