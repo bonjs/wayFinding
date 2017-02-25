@@ -117,6 +117,7 @@ WayFinding.prototype = {
 		
 		var arr = [];
 		var node = this.endNode;
+		arr.push(node);
 		while(node = node.parentNode) {
 			arr.push(node);
 		}
@@ -136,12 +137,10 @@ WayFinding.prototype = {
 		}, 0);
 	},
 	
-	showLine2: function() {
+	showLine: function() {
 		var node = this.endNode;
 		var timer = setInterval(function(){
 
-			node = node.parentNode;
-			
 			if(!node) {
 				clearInterval(timer);	
 				return;
@@ -151,7 +150,8 @@ WayFinding.prototype = {
 				node.el.css({
 					background: '#1f1'
 				});
-			}			
+			}
+			node = node.parentNode;			
 		}, 100);
 	}
 };
@@ -200,7 +200,7 @@ Node.prototype = {
 				var row = allNodes[this.y + neighborIndex[i][0]]
 				var node = row && row[this.x + neighborIndex[i][1]];
 				if(node) {
-					if(/start|roadblock/.test(node.type)) {
+					if(/roadblock/.test(node.type)) {
 						// 开始节点和障碍物
 						//console.log('start|roadblock忽略');
 					} else if(checkIn(closeList, node)) {
@@ -224,6 +224,9 @@ Node.prototype = {
 							node.f = node.getF();
 							node.parentNode = this;
 						}
+						if(!/roadblock/.test(node.type)) {
+							isShowInfo && node.showInfo();
+						}
 					} else {
 						console.log('其他');
 						
@@ -236,7 +239,7 @@ Node.prototype = {
 						node.h = node.getH();
 						node.f = node.getF();
 						node.parentNode = this;
-						if(!/start|roadblock|end/.test(node.type)) {
+						if(!/roadblock/.test(node.type)) {
 							isShowInfo && node.showInfo();
 						}
 						arr.push(node);
@@ -272,13 +275,70 @@ Node.prototype = {
 			return reg.test(num) ? num : num.toFixed(1) * 1;
 		};
 		return function() {
-			this.el.html([
-				'<span class="g">' + fixNum(this.g) + '</span>',
-				'<span class="h">' + fixNum(this.h) + '</span>',
-				'<span class="f">' + fixNum(this.f) + '</span>',
-			].join('')).css({
-				background: '#ee0'
-			});
+			/*
+			↖ ↑ ↗
+			← 	 → 
+			↙ ↓ ↘
+			*/
+			var parentNode = this.parentNode;
+			var arrow = '', tag = '';
+			if(parentNode.x - this.x == 1) {
+				if(parentNode.y - this.y == 1) {
+					// 右下
+					arrow = 'bottom-right';
+					tag = '↘'
+				}
+				if(parentNode.y - this.y == 0) {
+					// 右中
+					arrow = 'center-right';
+					tag = '→'
+				}
+				if(parentNode.y - this.y == -1) {
+					// 右上
+					arrow = 'top-right';
+					tag = '↗';
+				}
+			} else if(parentNode.x - this.x == 0) {
+				if(parentNode.y - this.y == 1) {
+					// 下
+					arrow = 'bottom';
+					tag = '↓';
+				}
+				if(parentNode.y - this.y == -1) {
+					// 上
+					arrow = 'top';
+					tag = '↑';
+				}
+			} else if(parentNode.x - this.x == -1) {
+				if(parentNode.y - this.y == 1) {
+					// 左下
+					arrow = 'bottom-left';
+					tag = '↙';
+				}
+				if(parentNode.y - this.y == 0) {
+					// 左中
+					arrow = 'center-left';
+					tag = '←';
+				}
+				if(parentNode.y - this.y == -1) {
+					// 左上
+					arrow = 'top-left ';
+					tag = '↖';
+				}
+			}
+			
+			if(this.type == 'end') {
+				this.el.append('<div class="' + arrow + '" >' + tag + '</div>');
+			} else {
+				this.el.html([
+					'<span class="g">' + fixNum(this.g) + '</span>',
+					'<span class="h">' + fixNum(this.h) + '</span>',
+					'<span class="f">' + fixNum(this.f) + '</span>',
+					'<div class="' + arrow + '" >' + tag + '</div>'
+				].join('')).css({
+					background: '#ee0'
+				});
+			}
 		}
 	}(),
 	
