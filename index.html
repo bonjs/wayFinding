@@ -9,25 +9,28 @@
 	* {
 		padding: 0px;
 		margin: 0px;
-		float: left;
 		font-size: 12px;
 	}
 	.container {
 		display: none;
+		overflow: hidden;
 		margin: 30px;
-		width: 513px;
+		width: 510px;
 		border-bottom: 1px gray solid;
 		border-right: 1px gray solid;
 	}
 	li {
 		width: 50px;
 		height: 50px;
+		//line-height: 50px;
+		float: left;
 		list-style: none;
 		border-left: 1px gray solid;
 		border-top: 1px gray solid;
 		position: relative;
 	}
 	.start,.end {
+		text-align: center;
 		font-size:18px;
 		color: white;
 		font-weight: bold;
@@ -62,6 +65,45 @@
 		font-weight: bold;
 	}
 	
+	.top-left, .top, top-right, center-left, center-right, bottom-left, bottom
+	bottom-right
+	{
+		
+		//width: 15px;
+		//height: 15px;
+	}
+	.top-left {
+		
+	}
+	.top {
+		text-align: center;
+	}
+	.top-right{
+		text-align: right;
+	}
+	.center-left {
+		line-height: 50px;
+	}
+	.center-right {
+		line-height: 50px;
+		text-align: right;
+	}
+	.bottom-left {
+		position: absolute;
+		bottom: 0px;
+	}
+	.bottom {
+		width: 100%;
+		position: absolute;
+		bottom: 0px;
+		text-align: center;
+	}
+	.bottom-right {
+		position: absolute;
+		bottom: 0px;
+		right: 0px;
+	}
+	
   </style>
   
 </head>
@@ -69,44 +111,43 @@
 <body>
 	<div class="container"></div>
 	
-  <script src="./src/jquery.js"></script>
-  <script src="./src/index.js"></script>
+	<script src="./src/jquery.js"></script>
+	<script src="./src/index.js"></script>
   
-  <script>
+	<script>
   
-	var w = new WayFinding({
-		isShowInfo: true,
-		showProcess: true,
-		rols: 10,
-		cols: 10,
-		start: [4,0],
-		end: [7,0],
-		roadblock: function() {
-			var arr = [
-				[2,3],
-				[3,3],
-				[4,3],
-				[5,3],
-				[6,3],
-				[6,2],
-				[6,1],
-				[6,0],
-				[7,3],
-				[8,3],
-				[2,4],
-				[2,5],
-				[2,6],
-				[2,7]
-			];
-			
-			return arr;
-		}()
-	});
-	setTimeout(function() {
-		w.start();
-	});
-  </script>
-	
+		var w = new WayFinding({
+			isShowInfo: true,
+			showProcess: true,
+			rols: 10,
+			cols: 10,
+			start: [4,0],
+			end: [7,0],
+			roadblock: function() {
+				var arr = [
+					[2,3],
+					[3,3],
+					[4,3],
+					[5,3],
+					[6,3],
+					[6,2],
+					[6,1],
+					[6,0],
+					[7,3],
+					[8,3],
+					[2,4],
+					[2,5],
+					[2,6],
+					[2,7]
+				];
+				
+				return arr;
+			}()
+		});
+		setTimeout(function() {
+			w.start();
+		});
+	</script>
 	
 </body>
 </html>
