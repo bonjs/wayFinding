@@ -10,7 +10,8 @@ var WayFinding = function(opts) {
 	
 	var allNodes = this.allNodes;
 	for(var i = 0; i < this.rows; i ++) {
-		var a = []
+		var a = [];
+		var ul = $('<ul />');
 		for(var j = 0; j < this.cols; j ++) {
 			var el = $('<li />');
 			a.push(new Node({
@@ -18,8 +19,9 @@ var WayFinding = function(opts) {
 				x: j,
 				y: i
 			}));
-			$('.container').append(el);
+			ul.append(el);
 		}
+		$('.container').append(ul);
 		allNodes.push(a);
 	}
 	$('.container').show();
