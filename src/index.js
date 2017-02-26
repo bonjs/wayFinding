@@ -274,58 +274,45 @@ Node.prototype = {
 		var fixNum = function(num) {
 			return reg.test(num) ? num : num.toFixed(1) * 1;
 		};
+		var dictionary = {
+			'1,1': {	// 右下
+				arrow : 'bottom-right',
+				tag : '↘'
+			},
+			'1,0': {	// 右中
+				arrow : 'center-right',
+				tag :'→'
+			},
+			'1,-1': { // 右上
+				arrow : 'top-right',
+				tag : '↗'
+			},
+			'0,1': { // 下
+				arrow : 'bottom',
+				tag :'↓'
+			},
+			'0,-1': {// 上
+				arrow : 'top',
+				tag : '↑'
+			},
+			'-1,1': {	// 左下
+				arrow : 'bottom-left',
+				tag : '↙'
+			},
+			'-1,0': { // 左中
+				arrow : 'center-left',
+				tag : '←'
+			},
+			'-1,-1': { // 左上
+				arrow : 'top-left',
+				tag: '↖'
+			},
+		};
 		return function() {
-			/*
-			↖ ↑ ↗
-			← 	 → 
-			↙ ↓ ↘
-			*/
 			var parentNode = this.parentNode;
-			var arrow = '', tag = '';
-			if(parentNode.x - this.x == 1) {
-				if(parentNode.y - this.y == 1) {
-					// 右下
-					arrow = 'bottom-right';
-					tag = '↘'
-				}
-				if(parentNode.y - this.y == 0) {
-					// 右中
-					arrow = 'center-right';
-					tag = '→'
-				}
-				if(parentNode.y - this.y == -1) {
-					// 右上
-					arrow = 'top-right';
-					tag = '↗';
-				}
-			} else if(parentNode.x - this.x == 0) {
-				if(parentNode.y - this.y == 1) {
-					// 下
-					arrow = 'bottom';
-					tag = '↓';
-				}
-				if(parentNode.y - this.y == -1) {
-					// 上
-					arrow = 'top';
-					tag = '↑';
-				}
-			} else if(parentNode.x - this.x == -1) {
-				if(parentNode.y - this.y == 1) {
-					// 左下
-					arrow = 'bottom-left';
-					tag = '↙';
-				}
-				if(parentNode.y - this.y == 0) {
-					// 左中
-					arrow = 'center-left';
-					tag = '←';
-				}
-				if(parentNode.y - this.y == -1) {
-					// 左上
-					arrow = 'top-left ';
-					tag = '↖';
-				}
-			}
+			var info = dictionary[(parentNode.x - this.x) + ',' + (parentNode.y - this.y)]
+			var arrow = info.arrow;
+			var tag = info.tag;
 			
 			if(this.type == 'end') {
 				this.el.append('<div class="' + arrow + '" >' + tag + '</div>');
