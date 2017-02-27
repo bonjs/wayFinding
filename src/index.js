@@ -93,16 +93,30 @@ WayFinding.prototype = {
 			}
 		}.bind(this));
 		
-		// 获取F值最小的节点
-		var smallestF = this.openList.reduce(function(node, n) {
-			return node.f > n.f ? n : node;
+		var min = [], minIndex = 0, minObj = this.openList[0];
+		for(var i = 0, list = this.openList, len = list.length; i < len; i ++) {
+			if(list[minIndex].f > list[i].f) {
+				min = [];
+				minIndex = i;
+				min.push(list[i]);
+			} else if(list[minIndex].f == list[i].f) {
+				minIndex = i;
+				min.push(list[i]);
+			}
+		};
+		
+		console.log('相同的数量', min.length);
+		
+		
+		// 获取h值最小的节点
+		var smallestF = min.reduce(function(node, n) {
+			return node.h > n.h ? n : node;
 		}, {
-			f: Number.MAX_VALUE
+			h: Number.MAX_VALUE
 		});
 		
 		smallestF.el.addClass('smallest');
 		
-		console.log('数量', smallestF.length);
 		
 		//console.log(smallestF);
 		
@@ -209,7 +223,7 @@ Node.prototype = {
 						// 已检查过的节点
 						//console.log('closeList忽略');
 					} else if(checkIn(openList, node)) {
-						console.log('openList');
+						//console.log('openList');
 						/**
 						如果邻居已经在 Open List 中（即该邻居已有父节点），
 						计算从当前节点移动到该邻居是否能使其得到更小的 G 值。
@@ -230,7 +244,7 @@ Node.prototype = {
 							isShowInfo && node.showInfo();
 						}
 					} else {
-						console.log('其他');
+						//console.log('其他');
 						
 						if(this.x == node.x || this.y == node.y) {	// 上下，左右，距离为1, 故g增1
 							node.g = this.g + 1;

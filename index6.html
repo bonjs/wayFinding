@@ -1,0 +1,126 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>wayFinding</title>
+  
+  <style>
+	* {
+		padding: 0px;
+		margin: 0px;
+		font-size: 12px;
+	}
+	.container {
+		display: none;
+		overflow: hidden;
+		margin: 30px;
+		width: 1489px;
+		border-bottom: 1px gray solid;
+		border-right: 1px gray solid;
+		
+	}
+	.container ul {
+		width: 100%;
+		clear: both;
+	}
+	li {
+		width: 50px;
+		height: 50px;
+		float: left;
+		list-style: none;
+		border-left: 1px gray solid;
+		border-top: 1px gray solid;
+		position: relative;
+	}
+	.start,.end {
+		//font-size:38px;
+		font-weight: bold;
+	}
+	.start {
+		background: red;
+	}
+	.end {
+		background: green;
+	}
+	.npc {
+		background: #2b3b46;
+	}
+	.f, .g, .h {
+		position: absolute;
+	}
+	.f {
+		color: blue;
+		left: 8px;
+		top: 8px;
+	}
+	.g {
+		left: 8px;
+		bottom: 8px;
+	}
+	.h {
+		right: 8px;
+		bottom: 8px;
+	}
+	
+  </style>
+  
+</head>
+
+<body>
+	<div class="container"></div>
+	<button id=run style="clear: both;">寻路</button>
+	
+	<script src="./src/jquery.js"></script>
+	<script src="./src/index.js"></script>
+	
+	<script>
+		var w = new WayFinding({
+			
+			isShowInfo: true,
+
+			rows: 10,
+			cols: 10,
+			start: [0,0],
+			end: [9,7],
+			roadblock: function() {
+				return [[3,0], [3,1], [3,2], [3,3], [3,4], [3,5],[3,6],[3,7],[3,8]];
+			}()
+		});
+		
+		setTimeout(function() {
+			w.start();
+		});
+		$('#run').click(function() {
+			
+		});
+		
+		window.arr = [];
+		$('li').mouseover(function(e) {
+			if(e.button != 2) {
+				return;
+			}
+			$(this).css({
+				background: 'yellow'
+			});
+			var index = $(this).index('li');
+			
+			var x  = index % w.cols;
+			var y = index / w.cols;
+			arr.push([x, parseInt(y)]);
+		});
+		
+		$(document).on('contextmenu', 'li', function(e){
+			e.preventDefault();
+			
+			var index = $(this).index('li');
+			
+			var x  = index % w.cols;
+			var y = index / w.cols;
+			
+			console.log(JSON.stringify([x, parseInt(y)]));
+			return false;
+		});
+	</script>
+</body>
+</html>
